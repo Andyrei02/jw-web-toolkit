@@ -1,0 +1,10 @@
+flask
+flask-admin
+flask-login
+flask-wtf
+flask-migrate
+flask-sqlalchemy
+
+psycopg2-binary
+
+dotenv
