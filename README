@@ -1,3 +1,7 @@
+
+run:
+``` python main.py ```
+
 Create the database:
 ```
 flask shell
