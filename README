@@ -1,24 +1,39 @@
+# JW Web Toolkit
+web version for [JW Ministry Toolkit](https://github.com/Andyrei02/jw-ministry-toolkit)
 
-run:
+## Clone this repository to your local machine
+```bash
+git clone https://github.com/Andyrei02/jw-web-toolkit
+cd jw-web-toolkit
 ```
-docker build -t flask-app .
-docker run -p 5000:5000 -e DATABASE_URL="sqlite:///app.db" flask-app
+## Usage
+- Build / Run docker container
+```bash
+docker build -t jw-web-toolkit .
+docker run -p 5000:5000 -e DATABASE_URL="sqlite:///app.db" jw-web-toolkit
 ```
-Stop container:
-``` docker stop flask-app ```
-See active containers:
-``` docker ps ```
-Run deamon: 
-``` docker run -d -p 5000:5000 --name flask-app flask-app ```
-Stop Docker:
+- Stop docker container:
+```bash
+docker stop jw-web-toolkit
+docker rm jw-web-toolkit
 ```
-docker stop flask-app
-docker rm flask-app
+- See active containers:
+```bash
+docker ps
 ```
 
-Create the database:
-```
+## Create the database:
+```bash
 flask shell
 >>> from app.extensions import db
 >>> db.create_all()
 ```
+
+## Author
+
+(2025) Andrei Cenusa
+
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
