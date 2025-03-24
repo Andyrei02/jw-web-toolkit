@@ -10,9 +10,6 @@ COPY . .
 # Устанавливаем зависимости
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Копируем .env в контейнер
-COPY .env .env
-
 # Открываем порт (если приложение работает на 5000 порту)
 EXPOSE 5000
 
