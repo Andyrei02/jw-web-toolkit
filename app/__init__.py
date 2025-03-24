@@ -8,6 +8,8 @@ def create_app():
     app = Flask(__name__, static_folder="static", template_folder="templates")
     app.config.from_object(Config)
 
+    print("Database URI:", app.config["SQLALCHEMY_DATABASE_URI"])
+
     # Initialize extensions
     db.init_app(app)
     login_manager.init_app(app)

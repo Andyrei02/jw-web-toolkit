@@ -1,6 +1,20 @@
 
 run:
-``` python main.py ```
+```
+docker build -t flask-app .
+docker run -p 5000:5000 -e DATABASE_URL="sqlite:///app.db" flask-app
+```
+Stop container:
+``` docker stop flask-app ```
+See active containers:
+``` docker ps ```
+Run deamon: 
+``` docker run -d -p 5000:5000 --name flask-app flask-app ```
+Stop Docker:
+```
+docker stop flask-app
+docker rm flask-app
+```
 
 Create the database:
 ```
