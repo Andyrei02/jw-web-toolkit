@@ -1,5 +1,6 @@
 # JW Web Toolkit
-web version for [JW Ministry Toolkit](https://github.com/Andyrei02/jw-ministry-toolkit)
+Web version for [JW Ministry Toolkit](https://github.com/Andyrei02/jw-ministry-toolkit)
+**The JW Ministry Toolkit** is an application designed to make it easier for Jehovah's Witnesses to create forms and spreadsheets. It provides a user-friendly interface to streamline the form creation process and other related tasks.
 
 ## Clone this repository to your local machine
 ```bash
