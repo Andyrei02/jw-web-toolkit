@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Workbook{% endblock %}
+{% block content %}
+    <h1>Welcome to the Workbook Page!</h1>
+    {% for wb in workbooks %}
+    <div>
+        <h2>{{ wb.title }}</h2>
+        <a href="{{ wb.link }}" target="_blank">Open Workbook</a>
+        {% if wb.img %}
+            <img src="{{ wb.img }}" alt="{{ wb.title }}">
+        {% endif %}
+    </div>
+{% endfor %}
+{% endblock %}

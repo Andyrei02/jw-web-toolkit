@@ -1,3 +1,7 @@
+# VENV
+dotenv
+
+# Flask
 flask
 flask-admin
 flask-login
@@ -5,6 +9,16 @@ flask-wtf
 flask-migrate
 flask-sqlalchemy
 
-psycopg2-binary
+# PDF generator
+weasyprint
+Jinja2
 
-dotenv
+
+# Parser
+aiohttp
+asyncio
+beautifulsoup4
+lxml
+
+# Scheduler
+apscheduler

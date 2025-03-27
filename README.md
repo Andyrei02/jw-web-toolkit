@@ -23,11 +23,18 @@ docker rm jw-web-toolkit
 docker ps
 ```
 
-## Create the database:
+## Create the database
 ```bash
 flask shell
 >>> from app.extensions import db
 >>> db.create_all()
+```
+
+## Migration Commands
+```bash
+flask db init  # Run this only if you haven't initialized migrations
+flask db migrate -m "comment"
+flask db upgrade
 ```
 
 ## Author
