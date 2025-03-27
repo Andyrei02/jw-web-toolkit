@@ -5,7 +5,7 @@ from app.utils.scheduler import start_scheduler
 
 from app.blueprints.auth import auth_bp
 from app.blueprints.main import main_bp
-from app.blueprints.workbook import workbook_bp
+from app.blueprints.workbook import workbooks_bp
 
 
 def create_app():
@@ -25,6 +25,6 @@ def create_app():
     # Register blueprints
     app.register_blueprint(auth_bp, url_prefix="/auth")
     app.register_blueprint(main_bp)
-    app.register_blueprint(workbook_bp)
+    app.register_blueprint(workbooks_bp)
 
     return app

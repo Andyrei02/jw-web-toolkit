@@ -1,12 +1,10 @@
 from flask import Blueprint, render_template
-from app.models import Workbook
+from app.models import WorkbooksList
 
-workbook_bp = Blueprint("workbook", __name__)
+workbooks_bp = Blueprint("workbooks", __name__)
 
-@workbook_bp.route("/workbook")
+@workbooks_bp.route("/workbooks")
 def home():
-    workbooks = Workbook.query.all()
-    for w in workbooks:
-        print(w.title, w.link, w.img)
+    workbooks = WorkbooksList.query.all()
 
     return render_template("workbook/workbook.html", workbooks=workbooks)

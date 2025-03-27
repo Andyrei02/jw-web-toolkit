@@ -6,7 +6,6 @@ from app.utils.parse_workbook import parse_workbook_list
 scheduler = BackgroundScheduler()
 
 def start_scheduler():
-    parse_workbook_list()
     if not scheduler.running:
         scheduler.start()
         current_app.logger.info("Scheduler started.")
