@@ -22,3 +22,6 @@ lxml
 
 # Scheduler
 apscheduler
+
+# Else
+psycopg2-binary
