@@ -1,14 +1,27 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='css/workbook.css') }}">
+
 {% extends "base.html" %}
 {% block title %}Workbooks{% endblock %}
+
+
 {% block content %}
     <h1>Welcome to the Workbooks Page!</h1>
-    {% for wb in workbooks %}
-    <div>
-        <h2>{{ wb.title }}</h2>
-        <a href="{{ wb.link }}" target="_blank">Open Workbook</a>
-        {% if wb.img %}
-            <img src="{{ wb.img }}" alt="{{ wb.title }}">
-        {% endif %}
+    <div class="gridView">
+        {% for wb in workbooks %}
+        <div class="synopsis publication dir-ltr">
+            <div class="syn-img">
+                <a href="{{ url_for('workbooks.complete_workbook', link=wb.link) }}">
+                    {% if wb.img %}
+                    <img src="{{ wb.img }}" alt="{{ wb.title }}">
+                    {% endif %}
+                </a>
+            </div>
+            <div class="syn-body">
+                <h2>{{ wb.title }}</h2>
+                
+            </div>
+        </div>
+        {% endfor %}
     </div>
-{% endfor %}
+    
 {% endblock %}
