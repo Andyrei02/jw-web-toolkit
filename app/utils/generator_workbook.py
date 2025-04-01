@@ -26,12 +26,12 @@ class MeetingSchedule:
         return data_copy
 
 class Service_Workbook_PDF_Generator:
-    def __init__(self, template_dir='templates'):
+    def __init__(self, template_dir='templates', css_path=None):
         self.schedule = MeetingSchedule("18:00")
         
         self.env = Environment(loader=FileSystemLoader(template_dir))
         self.template = "template.html"
-        self.css_path = os.path.join(template_dir, 'styles.css')
+        self.css_path = os.path.join(css_path, 'template_style.css')
         
     def generate_pdf(self, data):
         template = self.env.get_template(self.template)
@@ -47,8 +47,3 @@ class Service_Workbook_PDF_Generator:
         
         return pdf_io.getvalue()
 
-
-if __name__ == '__main__':
-    output_pdf = "output.pdf"
-    generator = Service_Workbook_PDF_Generator()
-    generator.generate_pdf(data, output_pdf=output_pdf)

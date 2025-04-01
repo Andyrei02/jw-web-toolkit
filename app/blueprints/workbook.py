@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, jsonify, send_file
+from flask import current_app, Blueprint, render_template, request, jsonify, send_file
 import json
 from io import BytesIO
 from app.utils.generator_workbook import Service_Workbook_PDF_Generator
@@ -22,22 +22,27 @@ def complete_workbook(link):
 
     workbook_data = Workbook.query.filter_by(title=workbook.title).first()
     
+    data_json = json.dumps(workbook_data.data, ensure_ascii=False) if workbook_data else "{}"
+
     return render_template(
         "workbook/complete_workbook.html", 
         workbook=workbook, 
-        data=workbook_data.data if workbook_data else {}
+        data=workbook_data.data if workbook_data else {},
+        data_json=data_json,
     )
+    
 
 
 @workbooks_bp.route("/generate_workbook_pdf", methods=["POST"])
 def generate_workbook_pdf():
-    print("generate")
+    print("generate_workbook_pdf called")
     try:
-        output_pdf = "output.pdf"
-        generator = Service_Workbook_PDF_Generator()
+        template_path = current_app.root_path + "/templates"
+        static_path = current_app.root_path + "/static/css"
+
+        generator = Service_Workbook_PDF_Generator(template_dir=template_path, css_path=static_path)
         data = request.get_json()  # Receive JSON data
-        generator.generate_pdf(data, output_pdf=output_pdf)
-        pdf_content = generator_workbook(data)  # Convert modified data into a PDF
+        pdf_content = generator.generate_pdf(data)
         pdf_io = BytesIO(pdf_content)
         
         return send_file(pdf_io, mimetype="application/pdf", as_attachment=True, download_name="workbook.pdf")

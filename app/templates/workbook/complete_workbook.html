@@ -34,7 +34,7 @@
                                     <div class="col-md-6 font-weight-bold">Presedinte</div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control"
-                                               name="{{ section }}_{{ loop.index0 }}"
+                                               name="{{ date }}__header__{{ title }}"
                                                value="{{ value[1] }}">
                                     </div>
                                 </div>
@@ -46,7 +46,7 @@
                                     <div class="col-md-6 font-weight-bold">{{ title }}</div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control"
-                                               name="{{ section }}_{{ loop.index0 }}"
+                                               name="{{ date }}__intro__{{ title }}"
                                                value="{{ value[1] }}">
                                     </div>
                                 </div>
@@ -60,7 +60,7 @@
                                     <div class="col-md-6 font-weight-bold">{{ title }}</div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control"
-                                               name="{{ section }}_{{ loop.index0 }}"
+                                               name="{{ date }}__section_1__{{ title }}"
                                                value="{{ value[1] }}">
                                     </div>
                                 </div>
@@ -74,7 +74,7 @@
                                     <div class="col-md-6 font-weight-bold">{{ title }}</div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control"
-                                               name="{{ section }}_{{ loop.index0 }}"
+                                               name="{{ date }}__section_2__{{ title }}"
                                                value="{{ value[1] }}">
                                     </div>
                                 </div>
@@ -88,7 +88,7 @@
                                     <div class="col-md-6 font-weight-bold">{{ title }}</div>
                                     <div class="col-md-6">
                                         <input type="text" class="form-control"
-                                               name="{{ section }}_{{ loop.index0 }}"
+                                               name="{{ date }}__section_3__{{ title }}"
                                                value="{{ value[1] }}">
                                     </div>
                                 </div>
@@ -102,30 +102,34 @@
         <button id="generatePdfBtn" class="btn btn-primary">Generate PDF</button>
     </div>
 
-    <p>{{ data }}</p>
 
     <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            var firstTab = new bootstrap.Tab(document.querySelector(".nav-link.active"));
-            firstTab.show();
-        });
-
         document.getElementById("generatePdfBtn").addEventListener("click", function () {
-            let formData = new FormData(document.getElementById("workbookForm")); // Now, workbookForm exist.
-            let data = {};
+            // Get the initial data from the JSON passed from Flask
+            let workbookData = {{ data_json | safe }};
+    
+            // Get form inputs and update `workbookData`
+            let formData = new FormData(document.getElementById("workbookForm"));
+            
+            for (let [name, value] of formData.entries()) {
+                // Extract section and index
+                let parts = name.split("__");
+                let date = parts[0];
+                let section = parts[1];
+                let item = parts[2];
 
-            formData.forEach((value, key) => {
-                data[key] = value;
-            });
-
-            fetch("{{ url_for('workbooks.generate_workbook_pdf') }}", {
+                workbookData[date][section][item][1] = value
+            }
+    
+            // Send the updated data to Flask
+            fetch("/generate_workbook_pdf", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json",
+                    "Content-Type": "application/json"
                 },
-                body: JSON.stringify(data),
+                body: JSON.stringify(workbookData)
             })
-            .then(response => response.blob())  // Expecting a PDF file as a response
+            .then(response => response.blob())  // Expecting a PDF
             .then(blob => {
                 let url = window.URL.createObjectURL(blob);
                 let a = document.createElement("a");
@@ -135,8 +139,125 @@
                 a.click();
                 document.body.removeChild(a);
             })
-            .catch(error => console.error("Error generating PDF:", error));
+            .catch(error => console.error("Error:", error));
         });
-
     </script>
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- 
+    <h1>{{ workbook.title }}</h1>
+
+    <div class="container">
+        <ul class="nav nav-tabs" id="workbookTabs" role="tablist"></ul>
+        <div class="tab-content mt-3" id="workbookContent"></div>
+
+        <button id="generatePdfBtn" class="btn btn-primary">Generate PDF</button>
+    </div>
+
+    <script>
+        let data = {{ data_json|tojson }};
+        
+        // Function to create tabs dynamically
+        function createTabs() {
+            let tabList = document.getElementById("workbookTabs");
+            let contentList = document.getElementById("workbookContent");
+            let first = true;
+            let tabIndex = 0;
+
+            for (let date in data) {
+                let tab = document.createElement("li");
+                tab.classList.add("nav-item");
+                tab.innerHTML = `<button class="nav-link ${first ? 'active' : ''}" 
+                                    id="tab-${tabIndex}" data-bs-toggle="tab" 
+                                    data-bs-target="#content-${tabIndex}" type="button" 
+                                    role="tab">${date}</button>`;
+                tabList.appendChild(tab);
+
+                let content = document.createElement("div");
+                content.classList.add("tab-pane", "fade", first ? "show", "active" : "");
+                content.id = `content-${tabIndex}`;
+                content.role = "tabpanel";
+                content.innerHTML = generateFormHTML(data[date], date);  
+                contentList.appendChild(content);
+
+                first = false;
+                tabIndex++;
+            }
+        }
+
+        // Function to generate the form
+        function generateFormHTML(sectionData, date) {
+            let formHTML = `<form class="workbook-form" data-date="${date}">`;
+            
+            for (let section in sectionData) {
+                formHTML += `<h4 class="mt-3">${section.replace('_', ' ').toUpperCase()}</h4>`;
+                for (let title in sectionData[section]) {
+                    let value = sectionData[section][title][1];  // Get the text value
+                    formHTML += `
+                        <div class="row mb-2">
+                            <div class="col-md-6 font-weight-bold">${title}</div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" 
+                                       name="${section}_${title}" 
+                                       value="${value}">
+                            </div>
+                        </div>`;
+                }
+            }
+            
+            formHTML += `</form>`;
+            return formHTML;
+        }
+
+        // Function to collect form data and update JSON
+        function collectFormData() {
+            let forms = document.querySelectorAll(".workbook-form");
+            forms.forEach(form => {
+                let date = form.dataset.date;
+                let inputs = form.querySelectorAll("input");
+
+                inputs.forEach(input => {
+                    let [section, title] = input.name.split("_");
+                    if (data[date] && data[date][section] && data[date][section][title]) {
+                        data[date][section][title][1] = input.value; // Update the JSON object
+                    }
+                });
+            });
+
+            return data;
+        }
+
+        // Send data back to the server
+        document.getElementById("generatePdfBtn").addEventListener("click", function() {
+            let updatedData = collectFormData();
+
+            fetch("/update_workbook", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(updatedData)
+            })
+            .then(response => response.json())
+            .then(result => {
+                alert("Data updated successfully!");
+            })
+            .catch(error => console.error("Error updating data:", error));
+        });
+
+        // Load the form on page load
+        createTabs();
+    </script>-->
