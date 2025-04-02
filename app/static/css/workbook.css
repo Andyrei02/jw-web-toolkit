@@ -1,5 +1,6 @@
 .gridView {
     display: grid;
+    justify-items: center;
     grid-template-columns: repeat(3, 1fr);
     gap: 20px;
 }
@@ -9,6 +10,7 @@
     padding: 20px;
     border-radius: 10px;
     box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 .gridView .synopsis.publication .syn-img {
@@ -31,7 +33,7 @@
     }
 }
 
-@media only screen and (min-device-width: 768px){
+@media only screen and (min-width: 768px){
     .gridView{
         grid-template-columns: repeat(3, 1fr);
     }

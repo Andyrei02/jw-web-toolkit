@@ -35,7 +35,6 @@ def complete_workbook(link):
 
 @workbooks_bp.route("/generate_workbook_pdf", methods=["POST"])
 def generate_workbook_pdf():
-    print("generate_workbook_pdf called")
     try:
         template_path = current_app.root_path + "/templates"
         static_path = current_app.root_path + "/static/css"
