@@ -103,14 +103,29 @@
         <button id="generatePdfBtn" class="btn btn-primary">Generate PDF</button>
     </div>
 
+    <div id="loadingMessage">
+        ⏳ Generating your PDF... Please wait.
+    </div>
+    
+
 
     <script>
+        function showNotification(message) {
+            let notification = document.getElementById("loadingMessage");
+            notification.innerText = message;
+            notification.style.top = "20px";
+            notification.style.display = "block";
+
+            // Hide after 3 seconds (if success)
+            setTimeout(() => {
+                notification.style.top = "-60px";
+            }, 5000);
+        }
         document.getElementById("generatePdfBtn").addEventListener("click", function () {
             // Get the initial data from the JSON passed from Flask
             let workbookData = {{ data_json | safe }};
     
             for (let date_tab in workbookData) {
-                console.log(date_tab)
                 // Get form inputs and update `workbookData`
                 let formData = new FormData(document.getElementById("workbookForm__"+date_tab));
                 for (let [name, value] of formData.entries()) {
@@ -123,6 +138,8 @@
                     workbookData[date][section][item][1] = value
                 }
             }
+
+            showNotification("⏳ Generating your PDF... Please wait.")
     
             // Send the updated data to Flask
             fetch("/generate_workbook_pdf", {
@@ -141,8 +158,14 @@
                 document.body.appendChild(a);
                 a.click();
                 document.body.removeChild(a);
+
+                showNotification("✅ Your PDF has been generated!");
             })
-            .catch(error => console.error("Error:", error));
+            .catch(error => {
+                console.error("Error:", error);
+                // Hide yhe loading message
+                showNotification("❌ Error generating PDF!");
+            });
         });
     </script>
 {% endblock %}
