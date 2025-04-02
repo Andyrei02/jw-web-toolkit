@@ -28,7 +28,8 @@
                      id="content-{{ loop.index0 }}"
                      role="tabpanel">
 
-                    <form id="workbookForm">  <div class="mb-3">
+                    <form id="workbookForm__{{ date }}">
+                        <div class="mb-3">
                             {% for title, value in sections['header'].items() %}
                                 <div class="row mb-2">
                                     <div class="col-md-6 font-weight-bold">Presedinte</div>
@@ -108,17 +109,19 @@
             // Get the initial data from the JSON passed from Flask
             let workbookData = {{ data_json | safe }};
     
-            // Get form inputs and update `workbookData`
-            let formData = new FormData(document.getElementById("workbookForm"));
-            
-            for (let [name, value] of formData.entries()) {
-                // Extract section and index
-                let parts = name.split("__");
-                let date = parts[0];
-                let section = parts[1];
-                let item = parts[2];
+            for (let date_tab in workbookData) {
+                console.log(date_tab)
+                // Get form inputs and update `workbookData`
+                let formData = new FormData(document.getElementById("workbookForm__"+date_tab));
+                for (let [name, value] of formData.entries()) {
+                    // Extract section and index
+                    let parts = name.split("__");
+                    let date = parts[0];
+                    let section = parts[1];
+                    let item = parts[2];
 
-                workbookData[date][section][item][1] = value
+                    workbookData[date][section][item][1] = value
+                }
             }
     
             // Send the updated data to Flask
