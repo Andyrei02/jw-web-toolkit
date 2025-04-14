@@ -26,8 +26,9 @@ class MeetingSchedule:
         return data_copy
 
 class Service_Workbook_PDF_Generator:
-    def __init__(self, template_dir='templates', css_path=None):
+    def __init__(self, bg=None, template_dir='templates', css_path=None):
         self.schedule = MeetingSchedule("18:00")
+        self.bg = bg
         
         self.env = Environment(loader=FileSystemLoader(template_dir))
         self.template = "template.html"
@@ -37,7 +38,7 @@ class Service_Workbook_PDF_Generator:
         template = self.env.get_template(self.template)
         processed_data = self.schedule.calculate_times(data)
         
-        html_content = template.render(schedule=processed_data, css_path=self.css_path)
+        html_content = template.render(schedule=processed_data, css_path=self.css_path, bg=self.bg)
         pdf_io = BytesIO()
                     
         # Generate PDF

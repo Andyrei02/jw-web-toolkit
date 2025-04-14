@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% block title %} Grafic de serviciu {% endblock %}
+
+{% block content %}
+<style>
+    body { font-family: sans-serif; padding: 1rem; }
+    #datesContainer { display: flex; }
+    .date-item { margin: 0.5rem 0; padding: 5px}
+    button { margin-left: 0.5rem; }
+</style>
+
+    <input type="date" id="calendar">
+    <button id="setDate">Set Date</button>
+    <button id="new_column"> New Column </button>
+    <button id="new_row"> New Row</button>
+
+    <div id="datesContainer"></div>
+
+    <div class="container">
+        <form id="schedule_service_form">
+            <div id="dates">
+
+            </div>
+            <div id="content">
+                <div id="names">
+
+                </div>
+                <div id="values">
+
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        const calendar = document.getElementById('calendar');
+        const setDateBtn = document.getElementById('setDate');
+        const datesContainer = document.getElementById('datesContainer');
+        const btn_new_col = document.getElementById('new_column');
+        const btn_now_row = document.getElementById('new_row');
+        const name_container = document.getElementById('names')
+        btn_new_col.disabled = true;
+        btn_now_row.disabled = true;
+
+        const name_list = [ ];
+
+        let lastDate = null;
+
+        function formatDate(date) {
+            const day = String(date.getDate()).padStart(2, '0');
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            return `${day}.${month}`;
+        }
+
+        function isValidDay(date) {
+            const day = date.getDay(); // 0 = Sunday, 1 = Monday, ..., 6 = Saturday
+            return day === 0 || day === 2;
+        }
+          
+        function getNextValidDate(date) {
+            let d = new Date(date);
+            d.setDate(d.getDate() + 1);
+            while (!isValidDay(d)) {
+                d.setDate(d.getDate() + 1);
+            }
+            return d;
+        }
+
+        function addDateItem(date) {
+            const div = document.createElement('div');
+            div.classList.add('date-item');
+
+            const span = document.createElement('span');
+            span.textContent = formatDate(date);
+            div.appendChild(span);
+
+            btn_new_col.onclick = () => {
+                lastDate = getNextValidDate(lastDate);
+                addDateItem(new Date(lastDate));
+            };
+
+            datesContainer.appendChild(div);
+        }
+
+        setDateBtn.onclick = () => {
+            btn_new_col.disabled = false;
+            btn_now_row.disabled = false;
+            if (!calendar.value) return;
+
+            lastDate = new Date(calendar.value);
+            
+            if (!isValidDay(lastDate)) {
+                lastDate = getNextValidDate(lastDate);
+              }
+            
+              datesContainer.innerHTML = ''; // Clear previous
+              addDateItem(new Date(lastDate));
+            
+        };
+
+        function addRow() {
+            const name = document.createElement('div');
+            name.setAttribute("name",name_list.length);
+            name_container.appendChild(name)
+        }
+
+        btn_now_row.onclick = () => {
+
+        }
+    </script>
+{% endblock %}
+
+
+<!-- Doua liste aparte: list(name) / list(date)
+get check box name using matrix id -->

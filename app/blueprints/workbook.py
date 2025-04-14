@@ -38,9 +38,13 @@ def generate_workbook_pdf():
     try:
         template_path = current_app.root_path + "/templates"
         static_path = current_app.root_path + "/static/css"
+        bg = None
 
-        generator = Service_Workbook_PDF_Generator(template_dir=template_path, css_path=static_path)
-        data = request.get_json()  # Receive JSON data
+        data = request.get_json()
+        bg = data["background"]
+        data.pop("background", None)
+        
+        generator = Service_Workbook_PDF_Generator(bg, template_dir=template_path, css_path=static_path)
         pdf_content = generator.generate_pdf(data)
         pdf_io = BytesIO(pdf_content)
         

@@ -6,7 +6,7 @@
     <title>Congregation Service Workbook</title>
     <link rel="stylesheet" href="{{ css_path }}">
 </head>
-<body>
+<body class="{{ 'bg-on' if bg else 'bg-off' }}">
 
     {% macro render_section(title, color_class, section_data) %}
         <span class="section-title {{ color_class }}">{{ title }}</span>
