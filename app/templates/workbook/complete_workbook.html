@@ -104,6 +104,11 @@
                 <input type="checkbox" id="show-background" class="substituted" name="show-background">
                 <label for="show-background"> Show background</label><br>
             </div>
+
+            <div id="email-tags-container" class="tag-input-wrapper">
+                <div class="email-tags" id="email-tags"></div>
+                <div class="add-tag" id="add-tag">+</div>
+            </div>            
         </form>
 
         <button id="generatePdfBtn" class="btn btn-primary">Generate PDF</button>
@@ -116,6 +121,87 @@
 
 
     <script>
+        // Email tags container
+        const addTagBtn = document.getElementById('add-tag');
+        const tagContainer = document.getElementById('email-tags');
+        let emailList = [];
+
+        function createInputTag(value = '') {
+            const tag = document.createElement('div');
+            tag.className = 'email-tag editing';
+
+            const input = document.createElement('input');
+            input.type = 'email';
+            input.value = value;
+            input.placeholder = 'Enter email';
+
+            input.addEventListener('blur', () => finishEditing(tag, input.value));
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                e.preventDefault();
+                input.blur();
+                }
+            });
+
+            tag.appendChild(input);
+            tagContainer.appendChild(tag);
+            input.focus();
+        }
+
+        function finishEditing(tag, value) {
+            const trimmed = value.trim();
+            if (!trimmed || emailList.includes(trimmed)) {
+                tag.remove();
+                return;
+            }
+
+            emailList.push(trimmed);
+            tag.className = 'email-tag';
+
+            tag.innerHTML = `
+                        <span>${trimmed}</span>
+                        <div class="actions">
+                            <button class="edit-btn">✏️</button>
+                            <button class="remove-btn">❌</button>
+                        </div>
+                    `;
+
+            tag.querySelector('.edit-btn').onclick = () => editTag(tag, trimmed);
+            tag.querySelector('.remove-btn').onclick = () => {
+                emailList = emailList.filter(e => e !== trimmed);
+                tag.remove();
+            };
+
+            tag.onclick = () => {
+                tag.classList.toggle('active');
+            };
+        }
+
+        function editTag(tag, oldValue) {
+            tag.innerHTML = '';
+            tag.classList.add('editing');
+            emailList = emailList.filter(e => e !== oldValue);
+            const input = document.createElement('input');
+            input.type = 'email';
+            input.value = oldValue;
+            tag.appendChild(input);
+            input.focus();
+
+            input.addEventListener('blur', () => finishEditing(tag, input.value));
+            input.addEventListener('keydown', e => {
+                if (e.key === 'Enter') {
+                e.preventDefault();
+                input.blur();
+                }
+            });
+        }
+        addTagBtn.addEventListener('click', () => createInputTag());
+    
+    </script>
+
+    <script>
+        // Style and generate button
+
         function showNotification(message) {
             let notification = document.getElementById("loadingMessage");
             notification.innerText = message;

@@ -110,6 +110,66 @@ h4 {
 }
 
 
+/* Style for email container form */
+.tag-input-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  gap: 5px;
+}
+
+.email-tags {
+display: flex;
+flex-wrap: wrap;
+}
+
+.email-tag {
+  background-color: #e0f0ff;
+  border-radius: 15px;
+  padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.email-tag span {
+  font-size: 14px;
+}
+
+.email-tag .actions {
+  display: none;
+  gap: 5px;
+}
+
+.email-tag.editing {
+  background-color: #fff3cd;
+}
+
+.email-tag.active .actions {
+  display: inline-flex;
+}
+
+.email-tag input {
+  border: none;
+  outline: none;
+  padding: 3px;
+  font-size: 14px;
+  background-color: transparent;
+}
+
+.add-tag {
+  cursor: pointer;
+  padding: 4px 10px;
+  background-color: #0d6efd;
+  color: #fff
+  border-radius: 15px;
+  font-weight: bold;
+}
+
 
 
 /* Check box Styles */
