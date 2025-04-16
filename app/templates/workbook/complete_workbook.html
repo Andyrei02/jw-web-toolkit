@@ -4,7 +4,7 @@
 {% block title %}{{ workbook.title }}{% endblock %}
 
 {% block content %}
-    <h1>{{ workbook.title }}</h1>
+    <h1 id="title">{{ workbook.title }}</h1>
 
     <div class="container">
         <ul class="nav nav-tabs" id="workbookTabs" role="tablist">
@@ -241,9 +241,9 @@
             workbookData.email_list = emailList;
 
             // add title (month) to json
-            workbookData.title = workbook.title;
+            workbookData.title = document.getElementById("title").textContent;
 
-            showNotification("⏳ Generating your PDF... Please wait.")
+            showNotification("⏳ Generating your PDF... Please wait.");
     
             // Send the updated data to Flask
             fetch("/generate_workbook_pdf", {
