@@ -43,6 +43,10 @@ def generate_workbook_pdf():
         bg = None
 
         data = request.get_json()
+        
+        title = data["title"]
+        data.pop("title")
+        
         bg = data["background"]
         data.pop("background", None)
         
@@ -55,8 +59,8 @@ def generate_workbook_pdf():
         
         sender_email = Config.admin_email
         sender_password = Config.admin_email_pass
-        email_subject = "Caiet pentru intrunire"
-        email_body = "Luna ..."
+        email_subject = title
+        email_body = "Caiet pentru întrunirea „Viața creștină și predicarea”"
         if email_list:
             for email in email_list:
                 send_email_with_pdf(

@@ -240,6 +240,9 @@
             // add email list to json
             workbookData.email_list = emailList;
 
+            // add title (month) to json
+            workbookData.title = workbook.title;
+
             showNotification("⏳ Generating your PDF... Please wait.")
     
             // Send the updated data to Flask
