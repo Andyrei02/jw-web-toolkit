@@ -197,11 +197,9 @@
         }
         addTagBtn.addEventListener('click', () => createInputTag());
     
-    </script>
 
-    <script>
+
         // Style and generate button
-
         function showNotification(message) {
             let notification = document.getElementById("loadingMessage");
             notification.innerText = message;
@@ -232,12 +230,15 @@
                 }
             }
 
+            // add background info to json
             var checkBox = document.getElementById("show-background");
             if (checkBox.checked == true){
                 workbookData.background = true;
               } else {
                 workbookData.background = false;
             }
+            // add email list to json
+            workbookData.email_list = emailList;
 
             showNotification("⏳ Generating your PDF... Please wait.")
     
