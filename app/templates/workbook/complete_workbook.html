@@ -23,7 +23,7 @@
             {% endfor %}
         </ul>
 
-        <div class="tab-content mt-3" id="workbookContent">
+        <div class="tab-content content-tile mt-3" id="workbookContent">
             {% for date, sections in data.items() %}
                 <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
                      id="content-{{ loop.index0 }}"
@@ -100,21 +100,33 @@
                 </div>
             {% endfor %}
         </div>
-        <form id="customize">
-            <div class="show-background">
-                <input type="checkbox" id="show-background" class="substituted" name="show-background">
-                <label for="show-background"> Show background</label><br>
+
+        
+        <div class="content-tile mt-3 mb-3">
+            <form id="customize">
+                <div class="form-check">
+                    <input type="checkbox" class="form-check-input" value="" id="show-background">
+                    <label class="form-check-label" for="show-background">adauga imaginea de fundal</label><br>
+                </div>
+
+                <div class="mt-3">
+                    <span>Indica posta/postele catre care se va transmite automat fisierul</span>
+                    <div id="email-tags-container" class="tag-input-wrapper">
+                        <div class="email-tags" id="email-tags"></div>
+                        <div class="add-tag" id="add-tag">+</div>
+                    </div>
+                </div>
+                
+            </form>
+
+            <div class="buttons mt-3">
+                <!-- <button id="previewPdfBtn" class="btn btn-primary">Preview</button> -->
+                <button id="generatePdfBtn" class="btn btn-primary">Genereaza fisierul</button>
             </div>
-
-            <div id="email-tags-container" class="tag-input-wrapper">
-                <div class="email-tags" id="email-tags"></div>
-                <div class="add-tag" id="add-tag">+</div>
-            </div>            
-        </form>
-
-        <button id="generatePdfBtn" class="btn btn-primary">Generate PDF</button>
+        </div>
     </div>
 
+    <!-- Notification -->
     <div id="loadingMessage">
         ⏳ Generating your PDF... Please wait.
     </div>
