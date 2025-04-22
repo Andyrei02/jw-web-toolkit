@@ -37,6 +37,10 @@ flask db migrate -m "comment"
 flask db upgrade
 ```
 
+## To Do
+- Admin panel
+- Login / Signin 
+
 ## Author
 
 (2025) Andrei Cenusa
