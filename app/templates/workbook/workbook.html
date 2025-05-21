@@ -5,23 +5,39 @@
 
 
 {% block content %}
-    <h1>Caiete pentru întrunirea „Viața creștină și predicarea”</h1>
-    <div class="gridView">
-        {% for wb in workbooks %}
-        <div class="synopsis publication dir-ltr">
-            <div class="syn-img">
-                <a href="{{ url_for('workbooks.complete_workbook', link=wb.link) }}">
-                    {% if wb.img %}
-                    <img src="{{ wb.img }}" alt="{{ wb.title }}">
-                    {% endif %}
-                </a>
-            </div>
-            <div class="syn-body">
-                <h2>{{ wb.title }}</h2>
-                
-            </div>
-        </div>
-        {% endfor %}
-    </div>
+<main>
+    <article id="article", class="layout-landing jwac dir-ltr">
+        <header>
+            <h1>Caiete pentru întrunirea „Viața creștină și predicarea”</h1>
+        </header>
+    </article>
     
+    <div id="pubListResults" class="layout-landing">
+        <div id="pubsViewResults" class="gridView dir-ltr">
+            {% for wb in workbooks %}
+            <div class="synopsis publication dir-ltr">
+                <div class="syn-img cvr publication">
+                    <div class="cvr-wrapper">
+                        <a href="{{ url_for('workbooks.complete_workbook', link=wb.link) }}">
+                            {% if wb.img %}
+                            <img src="{{ wb.img }}" alt="{{ wb.title }}">
+                            {% endif %}
+                        </a>
+                    </div>
+                </div>
+                <div class="syn-body publication">
+                    <p class="contextTitle">
+                        CAIET PENTRU ÎNTRUNIREA „VIAȚA CREȘTINĂ ȘI PREDICAREA”
+                    </p>
+                    <h3 class="publicationDesc">
+                        <a href="{{ url_for('workbooks.complete_workbook', link=wb.link) }}">
+                            {{ wb.title }}
+                        </a>
+                    </h3>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
 {% endblock %}
