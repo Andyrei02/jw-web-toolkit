@@ -40,7 +40,6 @@ flask db upgrade
 ## To Do
 - resolve bug with incorect show style
 - preview pdf
-- select tabs for show in pdf
 - show selected tabs
 - add table in db for save curent sesion
 - Admin panel

@@ -89,21 +89,33 @@ function showNotification(message) {
     }, 7000);
 }
 
+function show_page(id_page) {
+    
+}
+
 document.getElementById("generatePdfBtn").addEventListener("click", function () {
     // Get the initial data from the JSON passed from Flask
-    let workbookData = workbookDataFromServer;
+    let workbookData = structuredClone(workbookDataFromServer);
 
     for (let date_tab in workbookData) {
         // Get form inputs and update `workbookData`
-        let formData = new FormData(document.getElementById("workbookForm__"+date_tab));
+        let formElement = document.getElementById("workbookForm__"+date_tab);
+        let formData = new FormData(formElement);
+
+        let checkbox_page = formElement.querySelector("#show-page");
+
+        let date = "";
         for (let [name, value] of formData.entries()) {
             // Extract section and index
             let parts = name.split("__");
-            let date = parts[0];
+            date = parts[0];
             let section = parts[1];
             let item = parts[2];
 
             workbookData[date][section][item][1] = value
+        }
+        if (checkbox_page.checked == false) {
+            delete workbookData[date];
         }
     }
 
@@ -148,3 +160,4 @@ document.getElementById("generatePdfBtn").addEventListener("click", function () 
         showNotification("❌ Error generating PDF!");
     });
 });
+

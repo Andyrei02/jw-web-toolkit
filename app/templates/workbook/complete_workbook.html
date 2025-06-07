@@ -28,8 +28,13 @@
                 <div class="tab-pane fade {% if loop.first %}show active{% endif %}"
                      id="content-{{ loop.index0 }}"
                      role="tabpanel">
-
+                    
                     <form id="workbookForm__{{ date }}">
+                        <div class="form-check mb-3">
+                            <input type="checkbox" class="form-check-input" value="" id="show-page" checked>
+                            <label class="form-check-label" for="show-page">Afiseaza pagina</label><br>
+                        </div>
+
                         <div class="mb-3">
                             {% for title, value in sections['header'].items() %}
                                 <div class="row mb-2">
