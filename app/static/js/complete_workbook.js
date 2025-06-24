@@ -161,3 +161,74 @@ document.getElementById("generatePdfBtn").addEventListener("click", function () 
     });
 });
 
+
+
+document.getElementById("previewPdfBtn").addEventListener("click", function () {
+    // Get the initial data from the JSON passed from Flask
+    let workbookData = structuredClone(workbookDataFromServer);
+
+    for (let date_tab in workbookData) {
+        // Get form inputs and update `workbookData`
+        let formElement = document.getElementById("workbookForm__"+date_tab);
+        let formData = new FormData(formElement);
+
+        let checkbox_page = formElement.querySelector("#show-page");
+
+        let date = "";
+        for (let [name, value] of formData.entries()) {
+            // Extract section and index
+            let parts = name.split("__");
+            date = parts[0];
+            let section = parts[1];
+            let item = parts[2];
+
+            workbookData[date][section][item][1] = value
+        }
+        if (checkbox_page.checked == false) {
+            delete workbookData[date];
+        }
+    }
+
+    // add background info to json
+    var checkBox = document.getElementById("show-background");
+    if (checkBox.checked == true){
+        workbookData.background = true;
+      } else {
+        workbookData.background = false;
+    }
+    // add email list to json
+    workbookData.email_list = emailList;
+
+    // add title (month) to json
+    workbookData.title = document.getElementById("title").textContent;
+
+    showNotification("⏳ Generating your PDF... Please wait.");
+
+    // Send the updated data to Flask
+    fetch("/generate_workbook_pdf", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(workbookData)
+    })
+    .then(response => response.blob())  // Expecting a PDF
+    .then(blob => {
+        let url = window.URL.createObjectURL(blob);
+        document.getElementById("pdfFrame").src = url;
+        document.getElementById("pdfOverlay").style.display = "block";
+        document.getElementById("pdfModal").style.display = "block";
+        showNotification("✅ Preview loaded!");
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        // Hide yhe loading message
+        showNotification("❌ Error generating PDF!");
+    });
+});
+function closeModal() {
+    document.getElementById("pdfOverlay").style.display = "none";
+    document.getElementById("pdfModal").style.display = "none";
+    document.getElementById("pdfFrame").src = "";
+};
+

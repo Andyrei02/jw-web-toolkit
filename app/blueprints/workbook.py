@@ -76,3 +76,28 @@ def generate_workbook_pdf():
         return send_file(pdf_io, mimetype="application/pdf", as_attachment=True, download_name="workbook.pdf")
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@workbooks_bp.route("/preview_workbook_pdf", methods=["POST"])
+def preview_workbook_pdf():
+    try:
+        template_path = current_app.root_path + "/templates"
+        static_path = current_app.root_path + "/static/css"
+        bg = None
+
+        data = request.get_json()
+        
+        data.pop("title")
+        
+        bg = data["background"]
+        data.pop("background", None)
+        
+        data.pop("email_list", None)
+        
+        generator = Service_Workbook_PDF_Generator(bg, template_dir=template_path, css_path=static_path)
+        pdf_content = generator.generate_pdf(data)
+        pdf_io = BytesIO(pdf_content)
+                
+        return send_file(pdf_io, mimetype="application/pdf", as_attachment=True, download_name="workbook.pdf")
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

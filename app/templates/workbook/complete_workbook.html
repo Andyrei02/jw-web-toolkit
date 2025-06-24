@@ -131,6 +131,17 @@
         </div>
     </div>
 
+    
+    <!-- Pop Up preview pdf -->
+    <div id="pdfOverlay" onclick="closeModal()" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;"></div>
+    <div id="pdfModal" style="display:none; position:fixed; top:5%; left:10%; width:80%; height:90%; background:white; z-index:1000; box-shadow:0 0 10px rgba(0,0,0,0.5);">
+        <div style="text-align:right; padding:10px;">
+            <button onclick="closeModal()" style="font-size:16px;">✖ Close</button>
+        </div>
+        <iframe id="pdfFrame" style="width:100%; height:90%; border:none;"></iframe>
+    </div>
+
+
     <!-- Notification -->
     <div id="loadingMessage">
         ⏳ Generating your PDF... Please wait.
