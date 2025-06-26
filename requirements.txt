@@ -12,6 +12,7 @@ flask-sqlalchemy
 # PDF generator
 weasyprint
 Jinja2
+pikepdf
 
 
 # Parser

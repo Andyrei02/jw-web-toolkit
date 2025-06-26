@@ -11,6 +11,12 @@
             <h1>Caiete pentru întrunirea „Viața creștină și predicarea”</h1>
         </header>
     </article>
+
+    <div id="drop-area">
+        <p>📄 Drag & drop your PDF here or click to select</p>
+        <input type="file" id="fileElem" accept="application/pdf" hidden>
+        <button id="fileSelect">Select PDF</button>
+    </div>
     
     <div id="pubListResults" class="layout-landing">
         <div id="pubsViewResults" class="gridView dir-ltr">
@@ -40,4 +46,7 @@
         </div>
     </div>
 </main>
+
+<script src="{{ url_for('static', filename='js/workbook.js') }}"></script>
+
 {% endblock %}

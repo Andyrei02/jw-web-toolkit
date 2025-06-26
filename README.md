@@ -39,6 +39,7 @@ flask db upgrade
 
 ## To Do
 - resolve bug with incorect show style
+- import pdf for modify
 - show selected tabs
 - add table in db for save curent sesion
 - Admin panel

@@ -1,10 +1,14 @@
 import os
 import copy
+import json 
+
+import pikepdf
 
 from datetime import datetime, timedelta
 from jinja2 import Environment, FileSystemLoader
 from weasyprint import HTML
 from io import BytesIO
+
 
 class MeetingSchedule:
     def __init__(self, start_time):
@@ -25,6 +29,7 @@ class MeetingSchedule:
                     current_time = current_time + timedelta(minutes=next_time)
         return data_copy
 
+
 class Service_Workbook_PDF_Generator:
     def __init__(self, bg=None, template_dir='templates', css_path=None):
         self.schedule = MeetingSchedule("18:00")
@@ -33,7 +38,23 @@ class Service_Workbook_PDF_Generator:
         self.env = Environment(loader=FileSystemLoader(template_dir))
         self.template = "template.html"
         self.css_path = os.path.join(css_path, 'template_style.css')
-        
+    
+    def embed_json_metadata(self, pdf_bytes, json_data):
+        # Load PDF from bytes
+        pdf = pikepdf.Pdf.open(BytesIO(pdf_bytes))
+
+        # Convert dictionary to string
+        json_str = json.dumps(json_data, ensure_ascii=False)
+
+        # Add custom metadata
+        pdf.docinfo["/WorkbookData"] = json_str
+
+        # Save to BytesIO
+        output = BytesIO()
+        pdf.save(output)
+        output.seek(0)
+        return output.getvalue()
+
     def generate_pdf(self, data):
         template = self.env.get_template(self.template)
         processed_data = self.schedule.calculate_times(data)
@@ -46,5 +67,16 @@ class Service_Workbook_PDF_Generator:
         
         pdf_io.seek(0)
         
-        return pdf_io.getvalue()
+        return self.embed_json_metadata(pdf_io.getvalue(), data)
 
+
+def extract_json_metadata(file_storage):
+    try:
+        with pikepdf.open(file_storage.stream) as pdf:
+            metadata = pdf.docinfo
+            if "/WorkbookData" in metadata:
+                json_raw = metadata["/WorkbookData"]
+                return json.loads(str(json_raw))
+    except Exception as e:
+        print("Metadata extraction error:", e)
+    return None
